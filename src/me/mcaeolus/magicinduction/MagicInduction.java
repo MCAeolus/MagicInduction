@@ -1,5 +1,6 @@
 package me.mcaeolus.magicinduction;
 
+import me.mcaeolus.magicinduction.data.UserData;
 import org.bukkit.Server;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,12 +10,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MagicInduction extends JavaPlugin {
 
     private static MagicInduction mInduction;
+    private UserData DATA;
 
     @Override
     public void onEnable() {
         mInduction = this;
 
-
+        DATA = new UserData();
     }
 
     @Override
@@ -29,7 +31,7 @@ public class MagicInduction extends JavaPlugin {
     }
 
     public static Server getLocalServer(){
-        return mInduction.getLocalServer();
+        return mInduction.getServer();
     }
 
 }
