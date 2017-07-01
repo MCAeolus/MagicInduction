@@ -6,7 +6,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
  * Created by mcaeo on 7/1/2017.
  */
 public class Foci {
-    public enum FociType{NONE, FIRE, ICE, ENDER}
 
     private FociType TYPE;
     private String NAME;

@@ -5,10 +5,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 /**
  * Created by mcaeo on 7/1/2017.
  */
-public class IceFoci extends Foci {
+public class NoneFoci extends Foci {
 
-    public IceFoci() {
-        super("Ice Focus", FociType.ICE);
+    public NoneFoci() {
+        super("No Focus", FociType.NONE);
     }
 
     @Override

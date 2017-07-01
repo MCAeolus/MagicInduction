@@ -10,7 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MagicInduction extends JavaPlugin {
 
     private static MagicInduction mInduction;
-    private UserData DATA;
+    private static UserData DATA;
 
     @Override
     public void onEnable() {
@@ -23,7 +23,7 @@ public class MagicInduction extends JavaPlugin {
     public void onDisable() {
         mInduction = null;
 
-
+        DATA.save();
     }
 
     public static MagicInduction getInstance(){
@@ -32,6 +32,10 @@ public class MagicInduction extends JavaPlugin {
 
     public static Server getLocalServer(){
         return mInduction.getServer();
+    }
+
+    public static UserData getData(){
+        return DATA;
     }
 
 }
