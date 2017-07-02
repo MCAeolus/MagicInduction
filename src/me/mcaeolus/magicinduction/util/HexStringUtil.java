@@ -9,8 +9,8 @@ public class HexStringUtil {
     //This util is courtesy of filoghost!
     //Bukkit thread: https://bukkit.org/threads/storing-hidden-data-in-itemstacks-using-colors-persistent-no-nms.319970/
 
-    private static final String SEQUENCE_HEADER = "MG_IND_AE" + ChatColor.RESET + ChatColor.UNDERLINE + ChatColor.RESET;
-    private static final String SEQUENCE_FOOTER = "MG_IND_AE" + ChatColor.RESET + ChatColor.ITALIC + ChatColor.RESET;
+    private static final String SEQUENCE_HEADER = "" + ChatColor.RESET + ChatColor.UNDERLINE + ChatColor.RESET + ChatColor.YELLOW;
+    private static final String SEQUENCE_FOOTER = "" + ChatColor.BLACK + ChatColor.ITALIC + ChatColor.RESET + ChatColor.MAGIC;
 
 
     public static String encodeString(String hiddenString) {
