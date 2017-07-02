@@ -52,4 +52,8 @@ public class WandListener implements Listener {
             x.getValue().saveAndExit();
         }
     }
+
+    public static WandUser getUser(UUID playerId){
+        return USERS.get(playerId);
+    }
 }

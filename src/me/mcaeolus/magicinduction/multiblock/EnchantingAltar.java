@@ -1,7 +1,10 @@
 package me.mcaeolus.magicinduction.multiblock;
 
+import me.mcaeolus.magicinduction.wand.WandUser;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +37,14 @@ public class EnchantingAltar extends Multiblock {
     }
 
     @Override
-    public void build(Block center){
-        super.build(center);
+    public boolean interact(PlayerInteractEvent e, WandUser u){
+        return super.interact(e, u);
+    }
+
+    @Override
+    public Location[] build(Block center, WandUser user){
+        Location[] corners = super.build(center, user);
+        altars.add(new Cuboid(corners[0], corners[1], user.getPlayer().getUniqueId(), this));
+        return corners;
     }
 }

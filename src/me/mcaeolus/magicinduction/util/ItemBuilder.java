@@ -136,7 +136,7 @@ public class ItemBuilder {
      * @return the current instance for chainable application.
      * @since 1.0
      */
-    public ItemBuilder lores(final String[] lores){
+    public ItemBuilder lores(final String ... lores){
         List<String> loresList = meta().getLore();
         if(loresList == null){loresList = new ArrayList<>();}
         else{loresList.clear();}
