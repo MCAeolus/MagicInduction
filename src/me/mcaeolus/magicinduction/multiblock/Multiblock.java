@@ -51,7 +51,7 @@ public class Multiblock implements Listener {
             for(int x = 0; x < layers[y].length; x++){
                 for(int z = 0; z < layers[y][x].length; z++){
                     Block MOD = corner.getRelative(x, y, z);
-                    if(!BLACKLIST.contains(MOD.getType()))return null;
+                    if(!BLACKLIST.contains(MOD.getType()) && !MOD.getLocation().equals(center.getLocation()))return null;
                 }
             }
         }

@@ -1,6 +1,7 @@
 package me.mcaeolus.magicinduction.wand;
 
 import me.mcaeolus.magicinduction.MagicInduction;
+import me.mcaeolus.magicinduction.multiblock.EnchantingAltar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -45,6 +46,7 @@ public class WandListener implements Listener {
     public void leave(PlayerQuitEvent e){
         USERS.get(e.getPlayer().getUniqueId()).saveAndExit();
         USERS.remove(e.getPlayer().getUniqueId());
+        EnchantingAltar.removeUUID(e.getPlayer().getUniqueId());
     }
 
     public void saveAll(){

@@ -19,7 +19,7 @@ public class RecipeSetup {
         //Wand crafting
         ItemStack wand = new ItemBuilder(Material.STICK)
                 .name(ChatColor.GRAY + "Wand" + " - " + ChatColor.DARK_RED + "Not Empowered")
-                .lores(HexStringUtil.encodeString("{\"isWand\":\"true\",\"isActivated\":\"false\"}")).make();
+                .lore(HexStringUtil.encodeString("{\"isWand\":\"true\",\"isActivated\":\"false\"}")).make();
         NamespacedKey key = new NamespacedKey(MagicInduction.getInstance(), "wand");
         ShapedRecipe wand_recipe = new ShapedRecipe(key, wand);
         wand_recipe.shape(" g/",
