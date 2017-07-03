@@ -15,7 +15,7 @@ Ender Focus - 1 spell: right click open area to teleport to it.
 
 These spells each cost 100 mana.
 
-To obtain the foci, you must craft them. Below are the three recipes:
+To obtain the foci, you must craft them. Below are the three recipes:  
 Fire Focus: http://imgur.com/CtqE08X  
 Ice Focus: http://imgur.com/Yh74NUI  
 Ender Focus: http://imgur.com/OdxTm49
