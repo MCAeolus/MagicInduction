@@ -4,10 +4,10 @@ package me.mcaeolus.magicinduction.wand.foci;
  * Created by mcaeo on 7/1/2017.
  */
 public enum FociType {
-    NONE(new NoneFoci()),
-    FIRE(new FireFoci()),
-    ICE(new IceFoci()),
-    ENDER(new EnderFoci());
+    NO_FOCUS(new NoneFoci()),
+    FIRE_FOCUS(new FireFoci()),
+    ICE_FOCUS(new IceFoci()),
+    ENDER_FOCUS(new EnderFoci());
 
     public Foci FOCUS;
 

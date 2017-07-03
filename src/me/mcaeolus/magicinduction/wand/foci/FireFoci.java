@@ -1,7 +1,11 @@
 package me.mcaeolus.magicinduction.wand.foci;
 
+import me.mcaeolus.magicinduction.util.ItemBuilder;
 import me.mcaeolus.magicinduction.wand.WandUser;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Created by mcaeo on 7/1/2017.
@@ -9,7 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class FireFoci extends Foci {
 
     public FireFoci() {
-        super("Fire Focus", FociType.FIRE);
+        super(ChatColor.RED+"Fire Focus", FociType.FIRE_FOCUS, Material.FIRE);
     }
 
     @Override
