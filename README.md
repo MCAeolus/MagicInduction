@@ -8,10 +8,10 @@ Magic Induction uses no commands whatsoever, and depends on the user either havi
 After crafting this wand, you need to empower it. You are given instructions in-game, but some more info will be given here.
 As said in the in-game text, you need to place an iron block somewhere in the world in the middle of a semi-clear 5x5 space (tall grass/flowers/etc. dont matter but any blocks do). After placing this, drop the crafted wand on top of the block and right-click the iron block. This will create a 'ruin', which is simply a scar placed on the land by empowering the wand. This ruin serves no purpose afterwards. _It is noted these can also be created with an empowered wand that is using the No Focus state when right-clicking an iron block._ You now have an empowered wand! Congratulations. In order to enable casting mode, shift-right click the wand. Shift right-clicking also takes you out of casting mode. You can open the focus pouch to the wand using shift-left click to change what focus your wand is using (more on this later). You will start out with no foci.
 
-Focuses are what enable you to use different spells with the wand. There are currently 3 different foci (not included the 'No Focus'):
-Fire Focus - 2 spells: right click block to spawn lava source, right click in a general area to burn all living entities within a radius.
-Ice Focus - 1 spell: right click near or on water to turn all water blocks near that source block (4x4 grid) into ice. 
-Ender Focus - 1 spell: right click open area to teleport to it.
+Focuses are what enable you to use different spells with the wand. There are currently 3 different foci (not included the 'No Focus'):  
+Fire Focus - 2 spells: right click block to spawn lava source, right click in a general area to burn all living entities within a radius.  
+Ice Focus - 1 spell: right click near or on water to turn all water blocks near that source block (4x4 grid) into ice.   
+Ender Focus - 1 spell: right click open area to teleport to it.  
 
 These spells each cost 100 mana.
 
