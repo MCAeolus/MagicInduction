@@ -6,9 +6,11 @@ import me.mcaeolus.magicinduction.wand.WandUser;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -45,9 +47,10 @@ public class FociPouch implements Listener {
         if(isOpen)return;
         isOpen = true;
         Inventory inv = Bukkit.createInventory(null, InventoryType.HOPPER, ChatColor.RED + "Focus Pouch");
-        for(FociType x : foci)
-            inv.addItem(new ItemBuilder(x.FOCUS.getMaterial()).name(x.FOCUS.getName() + ChatColor.GRAY + " - " + (master.getCurrentFocus().equals(x) ? ChatColor.GREEN + "ACTIVE" : ChatColor.YELLOW + "INACTIVE")).make());
-
+        for(FociType x : foci) {
+            ItemStack iX = new ItemBuilder(x.FOCUS.getMaterial()).name(x.FOCUS.getName() + ChatColor.GRAY + " - " + (master.getCurrentFocus().equals(x) ? ChatColor.GREEN + "ACTIVE" : ChatColor.YELLOW + "INACTIVE")).make();
+            inv.addItem(iX);
+        }
         master.getPlayer().openInventory(inv);
     }
 
@@ -71,9 +74,16 @@ public class FociPouch implements Listener {
 
     @EventHandler
     public void click(InventoryClickEvent e){
-        if(e.getWhoClicked().getUniqueId() == master.getPlayer().getUniqueId() && isOpen){
+        if(e.getWhoClicked().getUniqueId().equals(master.getPlayer().getUniqueId()) && isOpen){
+
+            if(e.getClick() == ClickType.SHIFT_RIGHT || e.getClick() == ClickType.SHIFT_LEFT){
+                e.setCancelled(true);
+                return;
+            }
+
             e.setCancelled(true);
-            if(!(e.getClickedInventory().getType() == InventoryType.PLAYER)) {
+            e.setResult(Event.Result.DENY);
+            if(e.getClickedInventory() != null && !(e.getClickedInventory().getType() == InventoryType.PLAYER)) {
 
                 if(e.getSlot() < foci.size()) {
                     FociType f = foci.get(e.getSlot());
@@ -89,9 +99,11 @@ public class FociPouch implements Listener {
     public void close(InventoryCloseEvent e){
         if(e.getPlayer().getUniqueId().equals(master.getPlayer().getUniqueId()) && isOpen) {
             isOpen = false;
+
             if (newEquip) {
                 master.getPlayer().sendMessage(ChatColor.YELLOW + "You have equipped the " + master.getCurrentFocus().FOCUS.getName()+ ChatColor.YELLOW + ".");
                 newEquip = false;
+
             }
         }
     }

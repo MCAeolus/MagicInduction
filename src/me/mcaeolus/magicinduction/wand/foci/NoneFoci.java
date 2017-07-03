@@ -23,9 +23,11 @@ public class NoneFoci extends Foci {
         if (e.getAction() == Action.RIGHT_CLICK_BLOCK){
             if(u.getMana() >= 250) {
                 if (MagicInduction.getInstance().getMultiManager().attemptBuild(e, u)) u.attemptUseMana(250);
-            }else
+            }else {
                 u.getPlayer().sendMessage(ChatColor.RED + "You do not have enough mana to perform this action! (Minimum mana requirement: 250)");
+            }
         }
         u.updateManaBar();
+        u.setCasting(false);
     }
 }

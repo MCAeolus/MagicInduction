@@ -2,6 +2,8 @@ package me.mcaeolus.magicinduction.wand;
 
 
 import me.mcaeolus.magicinduction.MagicInduction;
+import me.mcaeolus.magicinduction.multiblock.Cuboid;
+import me.mcaeolus.magicinduction.multiblock.EnchantingAltar;
 import me.mcaeolus.magicinduction.multiblock.MultiManager;
 import me.mcaeolus.magicinduction.util.HexStringUtil;
 import me.mcaeolus.magicinduction.util.ItemBuilder;
@@ -49,7 +51,10 @@ public class WandUser extends BukkitRunnable {
     private int former_slot;
     private ItemStack wand;
 
-    private long last_switch;
+    private boolean isCasting = false;
+
+    private long last_switch = 0;
+    private long last_interact = 0;
 
     private static ItemBuilder FULL_MANA_PORTION = new ItemBuilder(Material.POTION).data(8193);
     private static ItemBuilder PARTIAL_MANA_PORTION = new ItemBuilder(Material.LINGERING_POTION).data(8193);
@@ -61,7 +66,7 @@ public class WandUser extends BukkitRunnable {
             mana = (int)MagicInduction.getUserData().get(player.getUniqueId().toString() + ".mana_current");
             max_mana = (int)MagicInduction.getUserData().get(player.getUniqueId().toString() + ".mana_max");
         }else {
-            max_mana = 250;
+            max_mana = 750;
             mana = 0;
             MagicInduction.getUserData().set("", player.getUniqueId().toString());
         }
@@ -123,6 +128,14 @@ public class WandUser extends BukkitRunnable {
         }
     }
 
+    public boolean getIsCasting(){
+        return isCasting;
+    }
+
+    public void setCasting(boolean z){
+        isCasting = z;
+    }
+
     public Player getPlayer(){
         return this.player;
     }
@@ -132,46 +145,51 @@ public class WandUser extends BukkitRunnable {
     }
 
     public void wandInteract(PlayerInteractEvent e){
-        if(isWand(player.getInventory().getItemInMainHand())) {
-            if (player.isSneaking()){
-                if((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-                    if(isEmpowered(player.getInventory().getItemInMainHand()))
-                        usingWand(!usingWand);
-                    else player.sendMessage(ChatColor.RED + "This wand has not been empowered!");
-                }else if((e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK))
-                    pouch.open();
-            }
-            else if (usingWand) currentFocus.FOCUS.interceptInteractEvent(e, this);
-        }else{
-            if(Foci.isFocus(player.getInventory().getItemInMainHand())){
-                if (player.isSneaking() && (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
-                    ItemStack iX = player.getInventory().getItemInMainHand();
-                    FociType f = FociType.valueOf(ChatColor.stripColor(iX.getItemMeta().getDisplayName()).replace(" ", "_").toUpperCase());
-                    if(pouch.attemptAddFocus(f)){
-                        player.sendMessage(ChatColor.GREEN + "You have added the "+f.FOCUS.getName() + " to your focus pouch.");
-                        player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount()-1);
-                    }
+        if(System.currentTimeMillis() - last_interact > 100) {
+            last_interact = System.currentTimeMillis();
+            if (isWand(player.getInventory().getItemInMainHand())) {
+                if (player.isSneaking()) {
+                    if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+                        if (isEmpowered(player.getInventory().getItemInMainHand()))
+                            usingWand(!usingWand);
+                        else player.sendMessage(ChatColor.RED + "This wand has not been empowered!");
+                    } else if ((e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK))
+                        pouch.open();
+                } else if (usingWand && !isCasting){
+                    isCasting = true;
+                    currentFocus.FOCUS.interceptInteractEvent(e, this);
                 }
-            }else {
-                Block b = e.getClickedBlock();
-                if(b != null ){
-                    for (Entity x : b.getWorld().getNearbyEntities(b.getLocation().add(0, 1, 0), 1, 1, 1)) {
-                        if (x instanceof Item) {
-                            ItemStack iX = ((Item) x).getItemStack();
-                            if (isWand(iX) && !isEmpowered(iX)
-                                    && MagicInduction.getInstance().getMultiManager().attemptBuild(e, this)) {
-                                World wX = x.getWorld();
-                                x.remove();
-                                ItemMeta iMx = iX.getItemMeta();
-                                ArrayList<String> lores = new ArrayList<>();
-                                lores.add(HexStringUtil.encodeString("{\"isWand\":\"true\",\"isActivated\":\"true\"}"));
-                                iMx.setLore(lores);
-                                iMx.setDisplayName(ChatColor.GOLD + "WAND" + ChatColor.GREEN + " - " + ChatColor.GRAY + "Inactive");
-                                iX.setItemMeta(iMx);
-                                iX.setType(Material.MAGMA_CREAM);
-                                wX.dropItem(b.getLocation().add(0, 2, 0), iX);
+            } else {
+                if (Foci.isFocus(player.getInventory().getItemInMainHand())) {
+                    if (player.isSneaking() && (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+                        ItemStack iX = player.getInventory().getItemInMainHand();
+                        FociType f = FociType.valueOf(ChatColor.stripColor(iX.getItemMeta().getDisplayName()).replace(" ", "_").toUpperCase());
+                        if (pouch.attemptAddFocus(f)) {
+                            player.sendMessage(ChatColor.GREEN + "You have added the " + f.FOCUS.getName() + ChatColor.GREEN + " to your focus pouch.");
+                            player.getInventory().getItemInMainHand().setAmount(player.getInventory().getItemInMainHand().getAmount() - 1);
+                        }
+                    }else e.setCancelled(true);
+                } else {
+                    Block b = e.getClickedBlock();
+                    if (b != null) {
+                        for (Entity x : b.getWorld().getNearbyEntities(b.getLocation().add(0, 1, 0), 1, 1, 1)) {
+                            if (x instanceof Item) {
+                                ItemStack iX = ((Item) x).getItemStack();
+                                if (isWand(iX) && !isEmpowered(iX)
+                                        && MagicInduction.getInstance().getMultiManager().attemptBuild(e, this)) {
+                                    World wX = x.getWorld();
+                                    x.remove();
+                                    ItemMeta iMx = iX.getItemMeta();
+                                    ArrayList<String> lores = new ArrayList<>();
+                                    lores.add(HexStringUtil.encodeString("{\"isWand\":\"true\",\"isActivated\":\"true\"}"));
+                                    iMx.setLore(lores);
+                                    iMx.setDisplayName(ChatColor.GOLD + "WAND" + ChatColor.GREEN + " - " + ChatColor.GRAY + "Inactive");
+                                    iX.setItemMeta(iMx);
+                                    iX.setType(Material.MAGMA_CREAM);
+                                    wX.dropItem(b.getLocation().add(0, 2, 0), iX);
 
-                                player.sendMessage(ChatColor.GOLD + "You have successfully empowered your wand! Shift-right click to activate and de-activate your wand.");
+                                    player.sendMessage(ChatColor.GOLD + "You have successfully empowered your wand! Shift-right click to activate and de-activate your wand.");
+                                }
                             }
                         }
                     }
@@ -237,7 +255,7 @@ public class WandUser extends BukkitRunnable {
         ItemMeta xWm = wand.getItemMeta();
         xWm.setDisplayName(ChatColor.BLUE + "Mana: " + ChatColor.YELLOW + mana + ChatColor.LIGHT_PURPLE + "/" + ChatColor.YELLOW + max_mana);
         wand.setItemMeta(xWm);
-        player.getInventory().setItemInMainHand(wand);
+        player.getInventory().setItem(0, wand);
     }
 
     @Override

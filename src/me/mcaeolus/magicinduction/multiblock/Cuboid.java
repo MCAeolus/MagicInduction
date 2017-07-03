@@ -1,6 +1,8 @@
 package me.mcaeolus.magicinduction.multiblock;
 
+import me.mcaeolus.magicinduction.MagicInduction;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;
@@ -16,11 +18,14 @@ public class Cuboid {
     private UUID player;
     private List<Block> blocks;
     private Multiblock master;
+    private Block center;
 
-    public Cuboid(Location c, Location c2, UUID player, Multiblock master){
+    public Cuboid(Block b, Location c, Location c2, UUID player, Multiblock master){
         L1 = c;
         L2 = c2;
-        this.player = player;
+        center = b;
+        if(player != null)
+            this.player = player;
         this.blocks = readRegionBlocks();
         this.master = master;
     }
@@ -40,11 +45,30 @@ public class Cuboid {
         return blocks;
     }
 
+    public Block getCenter(){
+        return center;
+    }
+
     public Multiblock getMaster(){
         return master;
     }
 
     public boolean isRegionValid(){
+        Character[][][] layers = master.getLayers();
+        for(int y = 0; y < layers.length; y++){
+            for(int x = 0; x < layers[y].length; x++){
+                for(int z = 0; z < layers[y][x].length; z++) {
+                    Material MOD_MAT = master.getCharacterMap().get(layers[y][x][z]);
+                    if (MOD_MAT != Material.AIR) {
+                        Block MOD = L1.getWorld().getBlockAt(L1.add(x, y, z));
+                        if(MOD_MAT != MOD.getType())return false;
+                    }
+
+                }
+            }
+            return true;
+        }
+
         return blocks.equals(readRegionBlocks());
     }
 
@@ -52,9 +76,16 @@ public class Cuboid {
         return this.player;
     }
 
-    public void save(){
-
+    public void remove(){
+        Character[][][] layers = master.getLayers();
+        for(int y = 0; y < layers.length; y++){
+            for(int x = 0; x < layers[y].length; x++){
+                for(int z = 0; z < layers[y][x].length; z++) {
+                    Material MOD_MAT = master.getCharacterMap().get(layers[y][x][z]);
+                    Block MOD = L1.getWorld().getBlockAt(L1.add(x, y, z));
+                    if(MOD.getType() == MOD_MAT)MOD.setType(Material.AIR);
+                }
+            }
+        }
     }
-
-
 }

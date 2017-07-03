@@ -17,6 +17,10 @@ public class MultiManager {
         structures.add(new EnchantingAltar());
     }
 
+    public List<Multiblock> structures(){
+        return structures;
+    }
+
     public boolean attemptBuild(PlayerInteractEvent e, WandUser u){
         for(Multiblock x : structures)if(x.interact(e, u))return true;
         return false;

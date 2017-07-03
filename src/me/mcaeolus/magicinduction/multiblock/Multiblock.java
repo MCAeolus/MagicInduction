@@ -17,6 +17,7 @@ public class Multiblock implements Listener {
     private Character[][][] layers;
     private HashMap<Character, Material> charCheck;
     private Material master;
+    private String name;
     private static List<Material> BLACKLIST = new ArrayList<>();
     static{
         BLACKLIST.add(Material.LONG_GRASS);
@@ -26,10 +27,23 @@ public class Multiblock implements Listener {
     }
 
 
-    public Multiblock(HashMap<Character, Material> charConvert, Material master, Character[][] ... layers){
+    public Multiblock(String name, HashMap<Character, Material> charConvert, Material master, Character[][] ... layers){
         this.layers = layers;
         this.charCheck = charConvert;
         this.master = master;
+        this.name = name;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public Character[][][] getLayers(){
+        return layers;
+    }
+
+    public HashMap<Character, Material> getCharacterMap(){
+        return charCheck;
     }
 
     public boolean interact(PlayerInteractEvent e, WandUser u){

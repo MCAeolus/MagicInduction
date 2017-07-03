@@ -30,8 +30,8 @@ public class RecipeListener implements Listener {
         if(WU.isWand(e.getRecipe().getResult()))
             p.sendMessage(ChatColor.GOLD + "To empower this wand, drop it on top of an iron block and then right click the block. Make sure the iron block has two blocks of space in each direction around it!");
         if(Foci.isFocus(e.getRecipe().getResult()) && WU.getMana() >= 250){
-                WU.attemptUseMana(250);
-                p.sendMessage(ChatColor.GOLD + "You have created a focus! Shift-left click your wand to equip and use this focus.");
+            WU.attemptUseMana(250);
+            p.sendMessage(ChatColor.GOLD + "You have created a focus! Shift-right click the focus to add it to your focus pouch.");
         }
     }
 
